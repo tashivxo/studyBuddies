@@ -145,29 +145,34 @@ const Index = () => {
         )}
 
         {/* Generate Button */}
-        {selectedTemplate && (
-          <div className="flex justify-center animate-fade-in">
-            <Button
-              variant="accent"
-              size="lg"
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="text-lg font-semibold"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                  Generating Content...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-5 w-5 mr-2" />
-                  Generate Content
-                </>
-              )}
-            </Button>
-          </div>
-        )}
+        <div className="flex justify-center animate-fade-in">
+          <Button
+            variant="accent"
+            size="lg"
+            onClick={handleGenerate}
+            disabled={
+              isGenerating ||
+              !selectedTemplate ||
+              !parameters.gradeLevel ||
+              !parameters.subject.trim() ||
+              !parameters.duration ||
+              !parameters.learningStyle
+            }
+            className="text-lg font-semibold"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                Generating Content...
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-5 w-5 mr-2" />
+                Generate Content
+              </>
+            )}
+          </Button>
+        </div>
 
         {/* Generated Content Display */}
         {generatedContent && (
