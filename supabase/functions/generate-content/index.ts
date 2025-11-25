@@ -12,10 +12,13 @@ serve(async (req) => {
 
   try {
     const { templateType, parameters } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const OPENAI_API_KEY = Deno.env.get("VITE_OPENAI_API_KEY");
+    const MODEL = Deno.env.get("VITE_OPENAI_MODEL");
+    const BASE = Deno.env.get("VITE_OPENAI_API_BASE");
+    const VERSION = Deno.env.get("VITE_OPENAI_API_VERSION");
     
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+    if (!OPENAI_API_KEY || !MODEL || !BASE || !VERSION) {
+      throw new Error("Azure OpenAI configuration is incomplete");
     }
 
     // Build the system prompt based on template type
@@ -45,18 +48,19 @@ Please provide comprehensive, well-structured content that is appropriate for th
 
     console.log("Generating content with:", { templateType, parameters });
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch(`${BASE}/openai/deployments/${MODEL}/chat/completions?api-version=${VERSION}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "api-key": OPENAI_API_KEY,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
+        max_tokens: 500,
+        temperature: 0.7,
       }),
     });
 
