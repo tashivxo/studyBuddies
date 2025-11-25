@@ -12,13 +12,18 @@ serve(async (req) => {
 
   try {
     const { templateType, parameters } = await req.json();
-    const OPENAI_API_KEY = Deno.env.get("VITE_OPENAI_API_KEY");
-    const MODEL = Deno.env.get("VITE_OPENAI_MODEL");
-    const BASE = Deno.env.get("VITE_OPENAI_API_BASE");
-    const VERSION = Deno.env.get("VITE_OPENAI_API_VERSION");
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    const MODEL = Deno.env.get("OPENAI_MODEL");
+    const BASE = Deno.env.get("OPENAI_API_BASE");
+    const VERSION = Deno.env.get("OPENAI_API_VERSION");
     
     if (!OPENAI_API_KEY || !MODEL || !BASE || !VERSION) {
-      throw new Error("Azure OpenAI configuration is incomplete");
+      const missing = [];
+      if (!OPENAI_API_KEY) missing.push("OPENAI_API_KEY");
+      if (!MODEL) missing.push("OPENAI_MODEL");
+      if (!BASE) missing.push("OPENAI_API_BASE");
+      if (!VERSION) missing.push("OPENAI_API_VERSION");
+      throw new Error(`Azure OpenAI configuration incomplete. Missing: ${missing.join(", ")}`);
     }
 
     // Build the system prompt based on template type
