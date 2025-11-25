@@ -27,6 +27,15 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+        env:
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_OPENAI_API_BASE: ${{ secrets.VITE_OPENAI_API_BASE }}
+          VITE_OPENAI_API_TYPE: ${{ secrets.VITE_OPENAI_API_TYPE }}
+          VITE_OPENAI_API_VERSION: ${{ secrets.VITE_OPENAI_API_VERSION }}
+          VITE_OPENAI_MODEL: ${{ secrets.VITE_OPENAI_MODEL }}
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
